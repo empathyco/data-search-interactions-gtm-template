@@ -1,8 +1,8 @@
 ___INFO___
 
 {
-  "displayName": "Empathy Co Search Interactions Tag",
-  "description": "Fire this tag when any search interaction (Click, Add2Cart, Add To Wishlist) is performed in your site populating variables collecting search info.",
+  "displayName": "Empathy.co search - interactions",
+  "description": "Fire this tag when any search interaction (Click, Add2Cart, Add To Wishlist, Checkout) is performed in your site populating variables collecting search info.",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
@@ -61,11 +61,6 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "displayName": "Input Parameters",
-    "name": "Input Parameters",
-    "type": "LABEL"
-  },
-  {
     "help": "Introduce search term of the current search",
     "alwaysInSummary": false,
     "valueValidators": [
@@ -111,7 +106,7 @@ ___TEMPLATE_PARAMETERS___
     "valueHint": "i.e. 0001-258-256"
   },
   {
-    "help": "Introduce destination URL of the selected result",
+    "help": "Introduce destination URL of the selected result. If not, introduce a fixed value",
     "alwaysInSummary": false,
     "valueValidators": [
       {
@@ -319,27 +314,6 @@ ___WEB_PERMISSIONS___
   {
     "instance": {
       "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "all"
-          }
-        }
-      ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": true
-    },
-    "isRequired": true
-  },
-  {
-    "instance": {
-      "key": {
         "publicId": "send_pixel",
         "versionId": "1"
       },
@@ -388,7 +362,6 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 // Enter your template code here.
 // Requirements:
-const log = require('logToConsole');
 const sendPixel = require('sendPixel');
 const getReferrer = require('getReferrerUrl');
 const query = require('queryPermission');
@@ -431,7 +404,7 @@ if(typeof(data.destinationURL) !== "undefined" && data.destinationURL !== ""){
 }
 
 
-//3.Filters
+//6.Filters
 if(typeof(data.filters) !== "undefined" && data.filters.length > 0){
   for (var j=0; j < data.filters.length ; j++){
   	if(typeof(data.filters[j]) !== "undefined" && data.filters[j] !== ""){
@@ -442,7 +415,7 @@ if(typeof(data.filters) !== "undefined" && data.filters.length > 0){
   }
 }
 
-//5.Additional Parameters
+//7.Additional Parameters
 if(typeof(data.additionalParameters) !== "undefined" && data.additionalParameters.length > 0){
   for (var j=0; j < data.additionalParameters.length ; j++){
   	if(typeof(data.additionalParameters[j]) !== "undefined" && data.additionalParameters[j] !== ""){
@@ -453,7 +426,7 @@ if(typeof(data.additionalParameters) !== "undefined" && data.additionalParameter
   }
 }
 
-//6.IDsParameters
+//8.IDsParameters
 if(typeof(data.IDsParameters) !== "undefined" && data.IDsParameters.length > 0){
   for (var j=0; j < data.IDsParameters.length ; j++){
   	if(typeof(data.IDsParameters[j]) !== "undefined" && data.IDsParameters[j] !== ""){
@@ -467,7 +440,6 @@ if(typeof(data.IDsParameters) !== "undefined" && data.IDsParameters.length > 0){
 //Send request:
 //Request built
 let request_url = base_url + data.instanceID + "/"+ data.event +"?"+parameters.join('&') + "&follow=false";
-log(request_url);
 let url = request_url;
 //Set request permissions:
 if (query('send_pixel', base_url)) {
@@ -476,7 +448,6 @@ if (query('send_pixel', base_url)) {
 
 
 // Call data.gtmOnSuccess when the tag is finished.
-log('data=',data);
 data.gtmOnSuccess();
 
 
