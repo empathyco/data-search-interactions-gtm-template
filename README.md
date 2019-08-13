@@ -7,7 +7,7 @@
 
 ## About empathy.co
 	
-[Just have a look at empathy.co](https://www.empathy.co)
+Just have a look at [empathy.co](https://www.empathy.co)!
 
 
 
