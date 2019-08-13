@@ -1,7 +1,16 @@
 # search-interactions-gtm-template
 
+# empathy.co search - query GTM template
+
 ## About the template
 
-	This tag allows empathy clients to send search interactions data to empathy.co servers in order to get contextual services and analytics.
+	This tag allows empathy clients to send search interactions data to empathy.co servers 
+	in order to get contextual services and analytics.
 
-## [empathy.co](https://www.empathy.co)
+## About empathy.co
+	
+	[Just have a look at empathy.co](https://www.empathy.co)
+
+
+
+
