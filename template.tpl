@@ -365,6 +365,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const sendPixel = require('sendPixel');
 const getReferrer = require('getReferrerUrl');
 const query = require('queryPermission');
+const encodeUri = require('encodeUri');
 
 //Base request URL:
 let base_url = "https://api.empathybroker.com/tagging/v1/track/";
@@ -420,7 +421,7 @@ if(typeof(data.additionalParameters) !== "undefined" && data.additionalParameter
   for (var j=0; j < data.additionalParameters.length ; j++){
   	if(typeof(data.additionalParameters[j]) !== "undefined" && data.additionalParameters[j] !== ""){
       	parameters[i] = data.additionalParameters[j].additionalParameters_name +'=' + data.additionalParameters[j].additionalParameters_value;
-		i++;
+        i++;
 		j++;
     }
   }
@@ -431,7 +432,7 @@ if(typeof(data.IDsParameters) !== "undefined" && data.IDsParameters.length > 0){
   for (var j=0; j < data.IDsParameters.length ; j++){
   	if(typeof(data.IDsParameters[j]) !== "undefined" && data.IDsParameters[j] !== ""){
       	parameters[i] = data.IDsParameters[j].IDsParameters_name +'=' + data.IDsParameters[j].IDsParameters_value;
-		i++;
+        i++;
 		j++;
     }
   }
@@ -439,11 +440,13 @@ if(typeof(data.IDsParameters) !== "undefined" && data.IDsParameters.length > 0){
 
 //Send request:
 //Request built
-let request_url = base_url + data.instanceID + "/"+ data.event +"?"+parameters.join('&') + "&follow=false";
-let url = request_url;
+let request_url = base_url + data.instanceID + "/"+ data.event;
+let path_input = "?" + parameters.join('&') + "&follow=false";
+let url = request_url + encodeUri(path_input);
+
 //Set request permissions:
 if (query('send_pixel', base_url)) {
-  sendPixel(url);
+  sendPixel(url,data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 
