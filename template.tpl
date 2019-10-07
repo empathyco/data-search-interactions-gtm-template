@@ -357,6 +357,13 @@ ___WEB_PERMISSIONS___
             "type": 1,
             "string": "any"
           }
+        },
+        {
+          "key": "queriesAllowed",
+          "value": {
+            "type": 1,
+            "string": "any"
+          }
         }
       ]
     },
@@ -383,42 +390,42 @@ var i = 0;
 
 //1.Query
 if(typeof(data.query) !== "undefined" && data.query !== ""){
-	parameters[i] = 'q=' + data.query;
-	i++;
+  parameters[i] = 'q=' + data.query;
+  i++;
 }
 
 //2.SERP Number (page):
 if(typeof(data.page) !== "undefined" && data.page !== ""){
-	parameters[i] = 'page=' + data.page;
-	i++;
+  parameters[i] = 'page=' + data.page;
+  i++;
 }
 
 //3.ProductID
 if(typeof(data.productID) !== "undefined" && data.productID !== ""){
-	parameters[i] = 'productId=' + data.productID;
-	i++;
+  parameters[i] = 'productId=' + data.productID;
+  i++;
 }
 
 //4.Title
 if(typeof(data.title) !== "undefined" && data.title !== ""){
-	parameters[i] = 'title=' + data.title;
-	i++;
+  parameters[i] = 'title=' + data.title;
+  i++;
 }
 
 //5.Destination URL
 if(typeof(data.destinationURL) !== "undefined" && data.destinationURL !== ""){
-	parameters[i] = 'url=' + data.destinationURL;
-	i++;
+  parameters[i] = 'url=' + data.destinationURL;
+  i++;
 }
 
 
 //6.Filters
 if(typeof(data.filters) !== "undefined" && data.filters.length > 0){
   for (var j=0; j < data.filters.length ; j++){
-  	if(typeof(data.filters[j]) !== "undefined" && data.filters[j] !== ""){
-      	parameters[i] = data.filters[j].filters_name +'=' + data.filters[j].filters_value;
-		i++;
-		j++;
+    if(typeof(data.filters[j]) !== "undefined" && data.filters[j] !== ""){
+        parameters[i] = data.filters[j].filters_name +'=' + data.filters[j].filters_value;
+    i++;
+    j++;
     }
   }
 }
@@ -426,10 +433,10 @@ if(typeof(data.filters) !== "undefined" && data.filters.length > 0){
 //7.Additional Parameters
 if(typeof(data.additionalParameters) !== "undefined" && data.additionalParameters.length > 0){
   for (var j=0; j < data.additionalParameters.length ; j++){
-  	if(typeof(data.additionalParameters[j]) !== "undefined" && data.additionalParameters[j] !== ""){
-      	parameters[i] = data.additionalParameters[j].additionalParameters_name +'=' + data.additionalParameters[j].additionalParameters_value;
-        i++;
-		j++;
+    if(typeof(data.additionalParameters[j]) !== "undefined" && data.additionalParameters[j] !== ""){
+        parameters[i] = data.additionalParameters[j].additionalParameters_name +'=' + data.additionalParameters[j].additionalParameters_value;
+    i++;
+    j++;
     }
   }
 }
@@ -437,10 +444,10 @@ if(typeof(data.additionalParameters) !== "undefined" && data.additionalParameter
 //8.IDsParameters
 if(typeof(data.IDsParameters) !== "undefined" && data.IDsParameters.length > 0){
   for (var j=0; j < data.IDsParameters.length ; j++){
-  	if(typeof(data.IDsParameters[j]) !== "undefined" && data.IDsParameters[j] !== ""){
-      	parameters[i] = data.IDsParameters[j].IDsParameters_name +'=' + data.IDsParameters[j].IDsParameters_value;
-        i++;
-		j++;
+    if(typeof(data.IDsParameters[j]) !== "undefined" && data.IDsParameters[j] !== ""){
+        parameters[i] = data.IDsParameters[j].IDsParameters_name +'=' + data.IDsParameters[j].IDsParameters_value;
+    i++;
+    j++;
     }
   }
 }
@@ -448,12 +455,12 @@ if(typeof(data.IDsParameters) !== "undefined" && data.IDsParameters.length > 0){
 //Send request:
 //Request built
 let request_url = base_url + data.instanceID + "/"+ data.event;
-let path_input = "?" + parameters.join('&') + "&follow=false";
-let url = request_url + encodeUri(path_input);
-
+let url = request_url;
+let path_input = "?"+parameters.join('&') + "&follow=false";
+let url_send = request_url + encodeUri(path_input);
 //Set request permissions:
 if (query('send_pixel', base_url)) {
-  sendPixel(url,data.gtmOnSuccess, data.gtmOnFailure);
+  sendPixel(url_send,data.gtmOnSuccess, data.gtmOnFailure);
 }
 
 
