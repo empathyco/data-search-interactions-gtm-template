@@ -1,5 +1,5 @@
 homepage: "www.empathy.co",
 documentation: "https://www.empathy.co/docs",
 versions:
-  - sha: 696c72aa2a99c2cdd13302e8652e11507602c7d8
+  - sha: 99c898af9f41b27a68a0f885d66932cbe791dd8b
     changeNotes: Initial Version
