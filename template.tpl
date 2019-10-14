@@ -425,7 +425,6 @@ if(typeof(data.filters) !== "undefined" && data.filters.length > 0){
     if(typeof(data.filters[j]) !== "undefined" && data.filters[j] !== ""){
         parameters[i] = data.filters[j].filters_name +'=' + data.filters[j].filters_value;
     i++;
-    j++;
     }
   }
 }
@@ -436,7 +435,6 @@ if(typeof(data.additionalParameters) !== "undefined" && data.additionalParameter
     if(typeof(data.additionalParameters[j]) !== "undefined" && data.additionalParameters[j] !== ""){
         parameters[i] = data.additionalParameters[j].additionalParameters_name +'=' + data.additionalParameters[j].additionalParameters_value;
     i++;
-    j++;
     }
   }
 }
@@ -447,7 +445,6 @@ if(typeof(data.IDsParameters) !== "undefined" && data.IDsParameters.length > 0){
     if(typeof(data.IDsParameters[j]) !== "undefined" && data.IDsParameters[j] !== ""){
         parameters[i] = data.IDsParameters[j].IDsParameters_name +'=' + data.IDsParameters[j].IDsParameters_value;
     i++;
-    j++;
     }
   }
 }
