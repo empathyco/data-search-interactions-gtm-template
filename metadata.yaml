@@ -2,4 +2,4 @@ homepage: "www.empathy.co",
 documentation: "https://www.empathy.co/docs",
 versions:
   - sha: 6dfd26e38357eba9615af475dc8669bc9bea615d
-    changeNotes: Initial Version
+    changeNotes: Updated Version
