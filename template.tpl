@@ -34,7 +34,7 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": true,
     "valueValidators": [
       {
-        "errorMessage": "This value cannot be empty",
+        "errorMessage": "Instance ID cannot be empty",
         "type": "NON_EMPTY"
       }
     ],
@@ -43,6 +43,39 @@ ___TEMPLATE_PARAMETERS___
     "name": "instanceID",
     "type": "TEXT",
     "valueHint": "i.e. mycompanyname"
+  },
+  {
+    "type": "SELECT",
+    "name": "environment",
+    "displayName": "Environment",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "displayValue": "SaaS - production"
+        "value": "saas",
+      },
+      {
+        "displayValue": "SaaS - staging"
+        "value": "saas-staging",
+      },
+      {
+        "displayValue": "Platform - production"
+        "value": "platform",
+      },
+      {
+        "displayValue": "Platform - staging"
+        "value": "platform-staging",
+      }
+    ],
+    "valueValidators": [
+      {
+        "errorMessage": "Environment cannot be empty",
+        "type": "NON_EMPTY"
+      }
+    ]
+    "simpleValueType": true,
+    "defaultValue": "saas",
+    "help": "Environment where events are going to be sent (SaaS or Platform)"
   },
   {
     "displayName": "Select the interaction to track",
@@ -73,7 +106,7 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": false,
     "valueValidators": [
       {
-        "errorMessage": "This value cannot be empty",
+        "errorMessage": "Query cannot be empty",
         "type": "NON_EMPTY"
       }
     ],
@@ -88,7 +121,7 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": false,
     "valueValidators": [
       {
-        "errorMessage": "This value cannot be empty",
+        "errorMessage": "Product Title cannot be empty",
         "type": "NON_EMPTY"
       }
     ],
@@ -103,7 +136,7 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": false,
     "valueValidators": [
       {
-        "errorMessage": "This value cannot be empty",
+        "errorMessage": "Product ID cannot be empty",
         "type": "NON_EMPTY"
       }
     ],
@@ -118,7 +151,7 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": false,
     "valueValidators": [
       {
-        "errorMessage": "This value cannot be empty",
+        "errorMessage": "Destination URL cannot be empty",
         "type": "NON_EMPTY"
       }
     ],
@@ -133,11 +166,11 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": false,
     "valueValidators": [
       {
-        "errorMessage": "This value cannot be empty",
+        "errorMessage": "Page cannot be empty",
         "type": "NON_EMPTY"
       },
       {
-        "errorMessage": "This value must be a positive integer",
+        "errorMessage": "Page must be a positive integer",
         "type": "POSITIVE_NUMBER"
       }
     ],
@@ -333,8 +366,24 @@ const getReferrer = require('getReferrerUrl');
 const query = require('queryPermission');
 const encodeUri = require('encodeUri');
 
+function getBaseUrl (environment) {
+  let url
+
+  if (environment === 'saas') {
+    url = 'https://api.empathybroker.com/tagging/v1/track/'
+  } else if (environment === 'saas-staging') {
+    url = 'https://api-staging.empathybroker.com/tagging/v1/track/'
+  } else if (environment === 'platform') {
+    url = 'https://CHANGE-ME'
+  } else if (environment === 'platform-staging') {
+    url = 'https://CHANGE-ME'
+  }
+
+  return url
+}
+
 //Base request URL:
-let base_url = "https://api.empathybroker.com/tagging/v1/track/";
+const base_url = getBaseUrl(data.environment);
 
 //Get parameters:
 let parameters = [];
@@ -416,6 +465,12 @@ if (query('send_pixel', base_url)) {
 // Call data.gtmOnSuccess when the tag is finished.
 data.gtmOnSuccess();
 
+// Return container object with fields required for testing the template.
+return {
+  url: url_send,
+  onSuccess: data.gtmOnSuccess,
+  onFailure: data.getOnFailure
+};
 
 ___WEB_PERMISSIONS___
 
@@ -435,6 +490,14 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "https://api.empathybroker.com/tagging/v1/track/*"
+              },
+              {
+                "type": 1,
+                "string": "https://api-staging.empathybroker.com/tagging/v1/track/*"
+              },
+              {
+                "type": 1,
+                "string": "https://CHANGE-ME/track/*"
               }
             ]
           }
@@ -476,7 +539,27 @@ ___WEB_PERMISSIONS___
 
 ___TESTS___
 
-scenarios: []
+scenarios:
+- name: SaaS Prod
+  code: "let environment = runCode({\n  instanceID: 'empathy',\n  environment: 'saas',\
+    \  \n  event: 'click', \n  query: 'sample', \n  page: 1,\n  productID: 'sample',\n\
+    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://api.empathybroker.com/tagging/v1/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
+    \ environment.onSuccess, environment.onFailure);"
+- name: SaaS Staging
+  code: "let environment = runCode({\n  instanceID: 'empathy',\n  environment: 'saas-staging',\
+    \  \n  event: 'click', \n  query: 'sample', \n  page: 1,\n  productID: 'sample',\n\
+    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://api-staging.empathybroker.com/tagging/v1/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
+    \ environment.onSuccess, environment.onFailure);"
+- name: Platform Prod
+  code: "let environment = runCode({\n  instanceID: 'empathy',\n  environment: 'platform',\
+    \  \n  event: 'click', \n  query: 'sample', \n  page: 1,\n  productID: 'sample',\n\
+    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://CHANGE-ME/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
+    \ environment.onSuccess, environment.onFailure);"
+- name: Platform Staging
+  code: "let environment = runCode({\n  instanceID: 'empathy',\n  environment: 'platform-staging',\
+    \  \n  event: 'click', \n  query: 'sample', \n  page: 1,\n  productID: 'sample',\n\
+    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://CHANGE-ME/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
+    \ environment.onSuccess, environment.onFailure);"
 
 
 ___NOTES___
