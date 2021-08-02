@@ -374,9 +374,9 @@ function getBaseUrl (environment) {
   } else if (environment === 'saas-staging') {
     url = 'https://api-staging.empathybroker.com/tagging/v1/track/'
   } else if (environment === 'platform') {
-    url = 'https://CHANGE-ME'
+    url = 'https://api.empathy.co/tagging/v1/track/'
   } else if (environment === 'platform-staging') {
-    url = 'https://CHANGE-ME'
+    url = 'https://api.staging.empathy.co/tagging/v1/track/'
   }
 
   return url
@@ -497,7 +497,11 @@ ___WEB_PERMISSIONS___
               },
               {
                 "type": 1,
-                "string": "https://CHANGE-ME/track/*"
+                "string": "https://api.empathy.co/tagging/v1/track/*"
+              },
+              {
+                "type": 1,
+                "string": "https://api.staging.empathy.co/tagging/v1/track/*"
               }
             ]
           }
@@ -553,12 +557,12 @@ scenarios:
 - name: Platform Prod
   code: "let environment = runCode({\n  instanceID: 'empathy',\n  environment: 'platform',\
     \  \n  event: 'click', \n  query: 'sample', \n  page: 1,\n  productID: 'sample',\n\
-    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://CHANGE-ME/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
+    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://api.empathy.co/tagging/v1/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
     \ environment.onSuccess, environment.onFailure);"
 - name: Platform Staging
   code: "let environment = runCode({\n  instanceID: 'empathy',\n  environment: 'platform-staging',\
     \  \n  event: 'click', \n  query: 'sample', \n  page: 1,\n  productID: 'sample',\n\
-    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://CHANGE-ME/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
+    \  title: 'sample'});\n\n// Verify that the tag finished successfully.\n\nassertApi('sendPixel').wasCalledWith('https://api.staging.empathy.co/tagging/v1/track/empathy/click?q=sample&page=1&productId=sample&title=sample&follow=false',\
     \ environment.onSuccess, environment.onFailure);"
 
 
